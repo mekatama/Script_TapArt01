@@ -7,11 +7,13 @@ using UnityEngine;
 public class TapChara : MonoBehaviour {
 	GameObject gameController;	//検索したオブジェクト入れる用
 	GameObject zombie;			//tapしたオブジェクト入れる用
-	private bool isTap = false;		//一回だけ処理
+	private bool isTap = false;	//一回だけ処理
+	Animator anim;				//Animator入れる用
 //	public AudioClip audioClipTap;	//tap SE
 
 	void Start () {
 		gameController = GameObject.FindWithTag ("GameController");	//GameControllerオブジェクトを探す
+		anim = this.gameObject.GetComponent<Animator> ();			//Animatorを取得
 	}
 
 	void Update () {
@@ -22,7 +24,7 @@ public class TapChara : MonoBehaviour {
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 			if(Physics.Raycast(ray, out hit)){
-				zombie = hit.collider.gameObject;
+				zombie = hit.collider.gameObject;	//tapしたobject取得
 			}
 
 			//Zombieをtapしたら
@@ -35,22 +37,22 @@ public class TapChara : MonoBehaviour {
 						//gcって仮の変数にGameControllerのコンポーネントを入れる
 						GameController gc = gameController.GetComponent<GameController>();
 						gc.zombieTap ++;
-						//ちょっとだけ拡大させる
-						zombie.transform.localScale = new Vector3(1.4f, 1.4f, 1.4f);
+						//animator用flag変更
+						anim.SetBool("isDown",true);
 						isTap = true;
-	//					//SEをその場で鳴らす
+						//SEをその場で鳴らす
 	//					AudioSource.PlayClipAtPoint( audioClipTap, transform.position);
-						//0.1秒後に呼び出す
-						Invoke("ScaleReset", 0.1f);
+						//1秒後に呼び出す
+						Invoke("PositionReset", 1.0f);
 					}
 				}
 			}
 		}
 	}
-	//時間差でスケールを戻す用
-	void ScaleReset(){
-		//元のスケールに戻す
-		zombie.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+	//時間差で位置を戻す用
+	void PositionReset(){
+		//元の位置に戻す
+		anim.SetBool("isDown",false);	//animator用flag変更
 		isTap = false;
 	}
 }
