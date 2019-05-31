@@ -32,18 +32,28 @@ public class TapChara : MonoBehaviour {
 				//タッチに反応
 				if(isTap == false){
 					//自分がタッチされたか判定
-					if(this.transform.name == zombie.name){					
-						Debug.Log("transform.name:" + this.transform.name);
+					if(this.transform.name == zombie.name){
+//						Debug.Log("transform.name:" + this.transform.name);
+						int animType = Random.Range(0,2);	//ランダムでanimation決める
 						//gcって仮の変数にGameControllerのコンポーネントを入れる
 						GameController gc = gameController.GetComponent<GameController>();
-						gc.zombieTap ++;
-						//animator用flag変更
-						anim.SetBool("isDown",true);
-						isTap = true;
+						gc.zombieTap ++;					//tap数加算
+						//animetion分岐
+						switch(animType){
+							case 0:
+								//animator用flag変更
+								anim.SetBool("isDown",true);
+								break;
+							case 1:
+								//animator用flag変更
+								anim.SetBool("isDown2",true);
+								break;
+						}
+						isTap = true;						//一回だけ処理用
 						//SEをその場で鳴らす
 	//					AudioSource.PlayClipAtPoint( audioClipTap, transform.position);
 						//1秒後に呼び出す
-						Invoke("PositionReset", 1.0f);
+						Invoke("PositionReset", 2.0f);
 					}
 				}
 			}
@@ -53,6 +63,7 @@ public class TapChara : MonoBehaviour {
 	void PositionReset(){
 		//元の位置に戻す
 		anim.SetBool("isDown",false);	//animator用flag変更
+		anim.SetBool("isDown2",false);	//animator用flag変更
 		isTap = false;
 	}
 }
