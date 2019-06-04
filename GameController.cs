@@ -43,8 +43,7 @@ public class GameController : MonoBehaviour {
 
 
 	void Update () {
-		Debug.Log("tap : " + zombieTap);
-		
+//		Debug.Log("tap : " + zombieTap);
 	}
 
 
