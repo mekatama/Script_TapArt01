@@ -9,6 +9,7 @@ public class TapChara : MonoBehaviour {
 	GameObject zombie;			//tapしたオブジェクト入れる用
 	private bool isTap = false;	//一回だけ処理
 	Animator anim;				//Animator入れる用
+	public int zombieHP;		//HP
 //	public AudioClip audioClipTap;	//tap SE
 
 	void Start () {
@@ -33,11 +34,12 @@ public class TapChara : MonoBehaviour {
 				if(isTap == false){
 					//自分がタッチされたか判定
 					if(this.transform.name == zombie.name){
-//						Debug.Log("transform.name:" + this.transform.name);
 						int animType = Random.Range(0,2);	//ランダムでanimation決める
 						//gcって仮の変数にGameControllerのコンポーネントを入れる
 						GameController gc = gameController.GetComponent<GameController>();
 						gc.zombieTap ++;					//tap数加算
+						zombieHP --;						//HP減らす
+						Debug.Log("HP:" + zombieHP + " : " +	this.transform.name);
 						//animetion分岐
 						switch(animType){
 							case 0:
