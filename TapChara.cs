@@ -11,6 +11,7 @@ public class TapChara : MonoBehaviour {
 	Animator anim;				//Animator入れる用
 	public int zombieHP;		//HP
 	private int zombieHPMax;	//MaxHP一時保存用
+	public int criticalDamage;	//クリティカルダメージ値
 //	public AudioClip audioClipTap;	//tap SE
 
 	void Start () {
@@ -37,15 +38,22 @@ public class TapChara : MonoBehaviour {
 					//自分がタッチされたか判定
 					if(this.transform.name == zombie.name){
 						int animType = Random.Range(0,2);	//ランダムでanimation決める
+						int criticalType = Random.Range(0,4);	//ランダムでクリティカル攻撃決める
 						//gcって仮の変数にGameControllerのコンポーネントを入れる
 						GameController gc = gameController.GetComponent<GameController>();
 						gc.zombieTap ++;					//tap数加算
-						zombieHP --;						//HP減らす
+						//ダメージ発生
+						if(criticalType < 1){
+							zombieHP = zombieHP - criticalDamage;	//クリティカルダメージ
+							Debug.Log("クリティカルダメージ");
+						}else{
+							zombieHP --;							//通常ダメージ
+						}
 						Debug.Log("HP:" + zombieHP + " : " +	this.transform.name);
 						if(zombieHP > 0){
 							//animator用flag変更
 							anim.SetBool("isDamage",true);
-						}else if(zombieHP == 0){
+						}else if(zombieHP <= 0){
 							//animetion分岐
 							switch(animType){
 								case 0:
