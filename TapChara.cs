@@ -10,11 +10,13 @@ public class TapChara : MonoBehaviour {
 	private bool isTap = false;	//一回だけ処理
 	Animator anim;				//Animator入れる用
 	public int zombieHP;		//HP
+	private int zombieHPMax;	//MaxHP一時保存用
 //	public AudioClip audioClipTap;	//tap SE
 
 	void Start () {
 		gameController = GameObject.FindWithTag ("GameController");	//GameControllerオブジェクトを探す
 		anim = this.gameObject.GetComponent<Animator> ();			//Animatorを取得
+		zombieHPMax = zombieHP;		//maxHP保存
 	}
 
 	void Update () {
@@ -40,16 +42,21 @@ public class TapChara : MonoBehaviour {
 						gc.zombieTap ++;					//tap数加算
 						zombieHP --;						//HP減らす
 						Debug.Log("HP:" + zombieHP + " : " +	this.transform.name);
-						//animetion分岐
-						switch(animType){
-							case 0:
-								//animator用flag変更
-								anim.SetBool("isDown",true);
-								break;
-							case 1:
-								//animator用flag変更
-								anim.SetBool("isDown2",true);
-								break;
+						if(zombieHP > 0){
+							//animator用flag変更
+							anim.SetBool("isDamage",true);
+						}else if(zombieHP == 0){
+							//animetion分岐
+							switch(animType){
+								case 0:
+									anim.SetBool("isDown",true);	//animator用flag変更
+									zombieHP = zombieHPMax;			//HP初期値にする
+									break;
+								case 1:
+									anim.SetBool("isDown2",true);	//animator用flag変更
+									zombieHP = zombieHPMax;			//HP初期値にする
+									break;
+							}
 						}
 						isTap = true;						//一回だけ処理用
 						//SEをその場で鳴らす
@@ -66,6 +73,7 @@ public class TapChara : MonoBehaviour {
 		//元の位置に戻す
 		anim.SetBool("isDown",false);	//animator用flag変更
 		anim.SetBool("isDown2",false);	//animator用flag変更
+		anim.SetBool("isDamage",false);	//animator用flag変更
 		isTap = false;
 	}
 }
