@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 	public int zombieTap;	//Tap数
+	public string[] text1;	//称号text1
+	public string[] text2;	//称号text1
+	public string syougou;	//称号表示用text
 
 	//ゲームステート
 	enum State{
@@ -44,6 +47,10 @@ public class GameController : MonoBehaviour {
 
 	void Update () {
 //		Debug.Log("tap : " + zombieTap);
+		if(zombieTap == 5){
+			syougou = text1[0] + text2[0];
+			Debug.Log("syougou : " + syougou);
+		}
 	}
 
 
