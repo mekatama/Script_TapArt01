@@ -8,12 +8,13 @@ public class TapChara : MonoBehaviour {
 	GameObject gameController;	//検索したオブジェクト入れる用
 	GameObject zombie;			//tapしたオブジェクト入れる用
 	private bool isTap = false;	//一回だけ処理
-//	private bool isDamage = false;	//一回だけ処理
 	Animator anim;				//Animator入れる用
 	public int zombieHP;		//HP
 	private int zombieHPMax;	//MaxHP一時保存用
 	public int criticalDamage;	//クリティカルダメージ値
-//	public AudioClip audioClipTap;	//tap SE
+	public AudioClip seDamage1;	//damage SE
+	public AudioClip seDamage2;	//damage SE
+	public AudioClip seKill;	//kill SE
 
 	void Start () {
 		gameController = GameObject.FindWithTag ("GameController");	//GameControllerオブジェクトを探す
@@ -51,16 +52,27 @@ public class TapChara : MonoBehaviour {
 							if(criticalType < 1){
 								//クリティカルダメージ
 								zombieHP = zombieHP - criticalDamage;	//クリティカルダメージ
+								//SEをその場で鳴らす
+								AudioSource.PlayClipAtPoint(seDamage2, transform.position);	//SE再生
 								Debug.Log("クリティカルダメージ");
 							}else{
 								//通常ダメージ
 								zombieHP --;							//通常ダメージ
+								//SEをその場で鳴らす
+								AudioSource.PlayClipAtPoint(seDamage1, transform.position);	//SE再生
 							}
+
+							//tap数
+								//gcって仮の変数にGameControllerのコンポーネントを入れる
+								GameController gc = gameController.GetComponent<GameController>();
+								gc.zombieTap ++;
 
 							//ダメージ処理
 							if(zombieHP > 0){
 								anim.SetBool("isDamage",true);	//animator用flag変更
 							}else if(zombieHP <= 0){
+								//SEをその場で鳴らす
+								AudioSource.PlayClipAtPoint(seKill, transform.position);	//SE再生
 								//animetion分岐
 								switch(animType){
 									case 0:
@@ -110,7 +122,6 @@ public class TapChara : MonoBehaviour {
 	void motionDamageFinish(){
 		anim.SetBool("isDamage",false);	//animator用flag変更
 		isTap = false;
-//		isDamage = false;
 //		Debug.Log("isTap motionDamageFinish : " + isTap);
 	}
 	void motionDown1Finish(){
