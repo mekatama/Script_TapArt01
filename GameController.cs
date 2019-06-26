@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour {
 
 	void Update () {
 		//称号表示判定
-		if(zombieTap %3 == 0){
+		if(zombieTap %3 == 0 && zombieTap > 0){
 //		if(zombieTap == 2){
 			if(goSyougou == false){
 				int text1Index = Random.Range(0,text1.Length);	//ランダムでtext決める
