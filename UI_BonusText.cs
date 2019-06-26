@@ -11,6 +11,6 @@ public class UI_BonusText : MonoBehaviour {
 		//gcって仮の変数にGameControllerのコンポーネントを入れる
 		GameController gc = gameController.GetComponent<GameController>();
 		//tap数表示
-		syougouText.text = "test : " + gc.syougou;
+		syougouText.text = gc.syougou;
 	}
 }
