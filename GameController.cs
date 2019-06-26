@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 	public string[] text1;	//称号text1
 	public string[] text2;	//称号text1
 	public string syougou;	//称号表示用text
+	private bool goSyougou;	//1回だけ用
 
 	//ゲームステート
 	enum State{
@@ -19,7 +20,8 @@ public class GameController : MonoBehaviour {
 	State state;
 
 	void Start () {
-		GameStart();	//初期ステート		
+		goSyougou = false;	//初期化
+		GameStart();		//初期ステート
 	}
 
 	void LateUpdate () {
@@ -46,13 +48,20 @@ public class GameController : MonoBehaviour {
 
 
 	void Update () {
-//		Debug.Log("tap : " + zombieTap);
-		if(zombieTap == 5){
-			syougou = text1[0] + text2[0];
-			Debug.Log("syougou : " + syougou);
+		//称号表示判定
+		if(zombieTap %3 == 0){
+//		if(zombieTap == 2){
+			if(goSyougou == false){
+				int text1Index = Random.Range(0,text1.Length);	//ランダムでtext決める
+				int text2Index = Random.Range(0,text2.Length);	//ランダムでtext決める
+				syougou = text1[text1Index] + text2[text2Index];
+				Debug.Log("syougou : " + syougou);
+				goSyougou = true;
+			}
+		}else{
+			goSyougou = false;
 		}
 	}
-
 
 	void GameStart(){
 		state = State.GameStart;
