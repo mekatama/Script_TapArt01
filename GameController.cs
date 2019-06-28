@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 	public int zombieTap;	//Tap数
+	public int zombieKill;	//Kill数
 	public string[] text1;	//称号text1
 	public string[] text2;	//称号text1
 	public string syougou;	//称号表示用text
@@ -53,8 +54,7 @@ public class GameController : MonoBehaviour {
 
 	void Update () {
 		//称号表示判定
-		if(zombieTap %3 == 0 && zombieTap > 0){
-//		if(zombieTap == 2){
+		if(zombieKill %3 == 0 && zombieKill > 0){
 			if(goSyougou == false){
 				int text1Index = Random.Range(0,text1.Length);	//ランダムでtext決める
 				int text2Index = Random.Range(0,text2.Length);	//ランダムでtext決める
