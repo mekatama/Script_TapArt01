@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour {
 	public string[] text2;	//称号text1
 	public string syougou;	//称号表示用text
 	private bool goSyougou;	//1回だけ用
+	public Text syougouText;	//Textコンポーネント取得用
+	float syougouUITime = 3.0f;	//UIを表示する時間
+	float time_UI = 0f;			//UIを表示する時間用の変数
 
 	//ゲームステート
 	enum State{
@@ -20,8 +23,9 @@ public class GameController : MonoBehaviour {
 	State state;
 
 	void Start () {
-		goSyougou = false;	//初期化
-		GameStart();		//初期ステート
+		goSyougou = false;				//初期化
+		syougouText.enabled = false;	//UI非表示
+		GameStart();					//初期ステート
 	}
 
 	void LateUpdate () {
@@ -54,12 +58,22 @@ public class GameController : MonoBehaviour {
 			if(goSyougou == false){
 				int text1Index = Random.Range(0,text1.Length);	//ランダムでtext決める
 				int text2Index = Random.Range(0,text2.Length);	//ランダムでtext決める
-				syougou = text1[text1Index] + text2[text2Index];
+				syougou = text1[text1Index] + text2[text2Index];//text合成
 				Debug.Log("syougou : " + syougou);
 				goSyougou = true;
+				syougouText.enabled = true;		//UI表示
 			}
 		}else{
 			goSyougou = false;
+		}
+
+		//UIを時間で非表示にする
+		if(syougouText.enabled == true){
+			time_UI += Time.deltaTime;
+			if(time_UI > syougouUITime){
+				syougouText.enabled = false;	//UI非表示
+				time_UI = 0f;					//初期化
+			}
 		}
 	}
 
