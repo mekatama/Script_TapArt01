@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
-	public int zombieTap;	//Tap数
-	public int zombieKill;	//Kill数
-	public string[] text1;	//称号text1
-	public string[] text2;	//称号text1
-	public string syougou;	//称号表示用text
-	private bool goSyougou;	//1回だけ用
+	public int zombieTap;		//Tap数
+	public int zombieKill;		//Kill数
+	public int syougouSikii;	//称号表示の閾値
+	public string[] text1;		//称号text1
+	public string[] text2;		//称号text1
+	public string syougou;		//称号表示用text
+	private bool goSyougou;		//1回だけ用
 	public Text syougouText;	//Textコンポーネント取得用
 	float syougouUITime = 3.0f;	//UIを表示する時間
 	float time_UI = 0f;			//UIを表示する時間用の変数
@@ -54,7 +55,7 @@ public class GameController : MonoBehaviour {
 
 	void Update () {
 		//称号表示判定
-		if(zombieKill %3 == 0 && zombieKill > 0){
+		if(zombieKill %syougouSikii == 0 && zombieKill > 0){
 			if(goSyougou == false){
 				int text1Index = Random.Range(0,text1.Length);	//ランダムでtext決める
 				int text2Index = Random.Range(0,text2.Length);	//ランダムでtext決める
