@@ -71,6 +71,7 @@ public class TapChara : MonoBehaviour {
 							if(zombieHP > 0){
 								anim.SetBool("isDamage",true);	//animator用flag変更
 							}else if(zombieHP <= 0){
+								gc.zombieKill ++;				//kill数加算
 								//SEをその場で鳴らす
 								AudioSource.PlayClipAtPoint(seKill, transform.position);	//SE再生
 								//animetion分岐
