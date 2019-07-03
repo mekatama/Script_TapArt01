@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour {
 	public Text syougouText;	//Textコンポーネント取得用
 	float syougouUITime = 3.0f;	//UIを表示する時間
 	float time_UI = 0f;			//UIを表示する時間用の変数
+	public Canvas dialogCanvas;	//UI dialog
+
 
 	//ゲームステート
 	enum State{
@@ -27,6 +29,7 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		goSyougou = false;				//初期化
 		syougouText.enabled = false;	//UI非表示
+		dialogCanvas.enabled = false;	//canvas非表示
 		GameStart();					//初期ステート
 	}
 
@@ -87,4 +90,18 @@ public class GameController : MonoBehaviour {
 	void Clear(){
 		state = State.Clear;
 	}
+
+	//dialog表示制御関数
+	public void ButtonClicked_Dialog(){
+		dialogCanvas.enabled = true;	//canvas表示
+	}
+	//dialog_OK制御関数
+	public void ButtonClicked_OK(){
+		SceneManager.LoadScene("title");	//シーンのロード
+	}
+	//dialog_Cancel制御関数
+	public void ButtonClicked_Cancel(){
+		dialogCanvas.enabled = false;	//canvas非表示
+	}
+
 }
