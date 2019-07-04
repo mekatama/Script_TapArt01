@@ -19,13 +19,14 @@ public class TapChara : MonoBehaviour {
 	void Start () {
 		gameController = GameObject.FindWithTag ("GameController");	//GameControllerオブジェクトを探す
 		anim = this.gameObject.GetComponent<Animator> ();			//Animatorを取得
-		zombieHPMax = zombieHP;		//maxHP保存
-//		zombie = null;
+		zombieHPMax = zombieHP;										//maxHP保存
 	}
 
 	void Update () {
 		//タップした判定
  		if(Input.GetMouseButtonDown(0)){
+			//gcって仮の変数にGameControllerのコンポーネントを入れる
+			GameController gc = gameController.GetComponent<GameController>();
 			Ray ray = new Ray();
             RaycastHit hit = new RaycastHit();
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -34,61 +35,61 @@ public class TapChara : MonoBehaviour {
 				zombie = hit.collider.gameObject;	//tapしたobject取得
 //				Debug.Log("name : " + zombie.transform.name);
 			}else{
-				zombie = null;
+				zombie = null;						//zombie以外をタッチした扱い
 			}
 
-			//error対策
+			//zombieがタッチされた時判定。error対策
 			if(zombie != null){
-				//Zombieをtapしたら
-				if(zombie.tag == "Zombie"){
-					//再生中animation取得
-					AnimatorClipInfo clipInfo = anim.GetCurrentAnimatorClipInfo (0)[0];
-	//				Debug.Log ("アニメーションクリップ名 : " + clipInfo.clip.name);
-					string anim_name = clipInfo.clip.name;	//再生中animation名を保存
-					//タッチに反応
-					if(isTap == false){
-						//自分がタッチされたか判定
-						if(this.transform.name == zombie.name){
-							//motion_wait再生中かどうか判定
-							if(anim_name == "motion_wait"){
-								int criticalType = Random.Range(0,4);	//ランダムでクリティカル攻撃決める
-								int animType = Random.Range(0,2);		//ランダムでanimation決める
-								//ダメージ発生
-								if(criticalType < 1){
-									//クリティカルダメージ
-									zombieHP = zombieHP - criticalDamage;	//クリティカルダメージ
-									//SEをその場で鳴らす
-									AudioSource.PlayClipAtPoint(seDamage2, transform.position);	//SE再生
-									Debug.Log("クリティカルダメージ");
-								}else{
-									//通常ダメージ
-									zombieHP --;							//通常ダメージ
-									//SEをその場で鳴らす
-									AudioSource.PlayClipAtPoint(seDamage1, transform.position);	//SE再生
-								}
+				//daialog表示中はタッチできなくする
+				if(gc.dialogCanvas.enabled == false){
+					//Zombieをtapしたら
+					if(zombie.tag == "Zombie"){
+						//再生中animation取得
+						AnimatorClipInfo clipInfo = anim.GetCurrentAnimatorClipInfo (0)[0];
+		//				Debug.Log ("アニメーションクリップ名 : " + clipInfo.clip.name);
+						string anim_name = clipInfo.clip.name;	//再生中animation名を保存
+						//タッチに反応
+						if(isTap == false){
+							//自分がタッチされたか判定
+							if(this.transform.name == zombie.name){
+								//motion_wait再生中かどうか判定
+								if(anim_name == "motion_wait"){
+									int criticalType = Random.Range(0,4);	//ランダムでクリティカル攻撃決める
+									int animType = Random.Range(0,2);		//ランダムでanimation決める
+									//ダメージ発生
+									if(criticalType < 1){
+										//クリティカルダメージ
+										zombieHP = zombieHP - criticalDamage;	//クリティカルダメージ
+										//SEをその場で鳴らす
+										AudioSource.PlayClipAtPoint(seDamage2, transform.position);	//SE再生
+										Debug.Log("クリティカルダメージ");
+									}else{
+										//通常ダメージ
+										zombieHP --;							//通常ダメージ
+										//SEをその場で鳴らす
+										AudioSource.PlayClipAtPoint(seDamage1, transform.position);	//SE再生
+									}
 
-								//tap数
-									//gcって仮の変数にGameControllerのコンポーネントを入れる
-									GameController gc = gameController.GetComponent<GameController>();
+									//tap数
 									gc.zombieTap ++;
-
-								//ダメージ処理
-								if(zombieHP > 0){
-									anim.SetBool("isDamage",true);	//animator用flag変更
-								}else if(zombieHP <= 0){
-									gc.zombieKill ++;				//kill数加算
-									//SEをその場で鳴らす
-									AudioSource.PlayClipAtPoint(seKill, transform.position);	//SE再生
-									//animetion分岐
-									switch(animType){
-										case 0:
-											anim.SetBool("isDown",true);	//animator用flag変更
-											zombieHP = zombieHPMax;			//HP初期値にする
-											break;
-										case 1:
-											anim.SetBool("isDown2",true);	//animator用flag変更
-											zombieHP = zombieHPMax;			//HP初期値にする
-											break;
+									//ダメージ処理
+									if(zombieHP > 0){
+										anim.SetBool("isDamage",true);	//animator用flag変更
+									}else if(zombieHP <= 0){
+										gc.zombieKill ++;				//kill数加算
+										//SEをその場で鳴らす
+										AudioSource.PlayClipAtPoint(seKill, transform.position);	//SE再生
+										//animetion分岐
+										switch(animType){
+											case 0:
+												anim.SetBool("isDown",true);	//animator用flag変更
+												zombieHP = zombieHPMax;			//HP初期値にする
+												break;
+											case 1:
+												anim.SetBool("isDown2",true);	//animator用flag変更
+												zombieHP = zombieHPMax;			//HP初期値にする
+												break;
+										}
 									}
 								}
 							}
