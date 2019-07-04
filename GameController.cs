@@ -16,11 +16,13 @@ public class GameController : MonoBehaviour {
 	float syougouUITime = 3.0f;	//UIを表示する時間
 	float time_UI = 0f;			//UIを表示する時間用の変数
 	public Canvas dialogCanvas;	//UI dialog
+	public Canvas inGameCanvas;	//UI dialog
 
 
 	//ゲームステート
 	enum State{
 		GameStart,	//
+		Demo,		//
 		Play,		//
 		Clear,		//不要かも
 	}
@@ -30,6 +32,7 @@ public class GameController : MonoBehaviour {
 		goSyougou = false;				//初期化
 		syougouText.enabled = false;	//UI非表示
 		dialogCanvas.enabled = false;	//canvas非表示
+		inGameCanvas.enabled = false;	//canvas非表示
 		GameStart();					//初期ステート
 	}
 
@@ -38,9 +41,16 @@ public class GameController : MonoBehaviour {
 		switch(state){
 			case State.GameStart:
 //				Debug.Log("game start");
+				Demo();		//ステート移動		
+				break;
+			case State.Demo:
+//				Debug.Log("demo start");
+
+				//■ここでdemo終了したらflagを立てて、UI表示とstate変化
+
+				inGameCanvas.enabled = true;	//canvas表示
 				Play();		//ステート移動		
 				break;
-			//
 			case State.Play:
 //				Debug.Log("play");
 				//finish判定
@@ -83,6 +93,9 @@ public class GameController : MonoBehaviour {
 
 	void GameStart(){
 		state = State.GameStart;
+	}
+	void Demo(){
+		state = State.Demo;
 	}
 	void Play(){
 		state = State.Play;
